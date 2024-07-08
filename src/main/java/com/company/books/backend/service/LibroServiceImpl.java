@@ -135,4 +135,20 @@ public class LibroServiceImpl implements ILibrosServiceImpl {
 
     }
 
+    @Override
+    public ResponseEntity<LibroResponseRest> borrarLibro(Long id) {
+        log.info("inicia proceso elminar libro");
+        LibroResponseRest libroResponseRest = new LibroResponseRest();
+        try {
+            iLibroDao.deleteById(id);
+            libroResponseRest.setMetada("respuesta ok", "00", "Libro eliminado");
+        } catch (Exception e) {
+            log.info("error al eliminar el libro, " + e.getMessage());
+            e.getStackTrace();
+            libroResponseRest.setMetada("nok", "-1", "No se eliminó el libro");
+            return new ResponseEntity<LibroResponseRest>(libroResponseRest, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<LibroResponseRest>(libroResponseRest, HttpStatus.OK);
+    }
+
 }
